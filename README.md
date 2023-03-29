@@ -1,2 +1,2 @@
-# hyperbench-riscv
-A RISC-V hypervisor benchmark suite
+# hyperbench-riscv-rs
+A RISC-V hypervisor benchmark suite in Rust.
