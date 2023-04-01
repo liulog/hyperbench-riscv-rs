@@ -1,30 +1,18 @@
-use alloc::vec::Vec;
-use alloc::vec;
 use alloc::boxed::Box;
+use alloc::vec;
+use alloc::vec::Vec;
 
-
-
-pub mod idle;
 pub mod hypercall;
-pub mod memory;
+pub mod idle;
 pub mod io;
+pub mod memory;
 
-use idle::Idle;
 use hypercall::Hypercall;
-use memory::{HotMemoryAccess, ColdMemoryAccess, SetPageTable};
+use idle::Idle;
 use io::{In, Out, Print};
+use memory::{ColdMemoryAccess, HotMemoryAccess, SetPageTable};
 
-// pub struct Benchmark<F> {
-//     pub name: String,
-//     pub category: String,
-//     pub init: Option<F>,
-//     pub benchmark: F,
-//     pub benchmark_contol: F,
-//     pub cleanup: Option<F>,
-//     pub iter_count: usize,
-// }
-
-pub trait Benchmark{
+pub trait Benchmark {
     /// initialize benchmark context
     fn init(&self);
     /// execute benchmark function call
@@ -34,7 +22,7 @@ pub trait Benchmark{
 }
 
 pub struct BenchmarkTable {
-    pub table: Vec<Box<dyn Benchmark>>
+    pub table: Vec<Box<dyn Benchmark>>,
 }
 
 impl BenchmarkTable {
@@ -51,8 +39,16 @@ impl BenchmarkTable {
             // IO benchmark
             Box::new(In),
             Box::new(Out),
-            Box::new(Print)
+            Box::new(Print),
         ];
         Self { table }
+    }
+
+    pub fn benchmark(&self) {
+        for item in self.table.iter() {
+            item.init();
+            item.benchmark();
+            item.clean();
+        }
     }
 }

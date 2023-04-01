@@ -11,8 +11,6 @@
     stdsimd
 )]
 
-
-
 extern crate alloc;
 
 mod benchmark;
