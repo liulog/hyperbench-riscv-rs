@@ -10,6 +10,9 @@ pub mod memory;
 pub mod io;
 
 use idle::Idle;
+use hypercall::Hypercall;
+use memory::{HotMemoryAccess, ColdMemoryAccess, SetPageTable};
+use io::{In, Out, Print};
 
 // pub struct Benchmark<F> {
 //     pub name: String,
@@ -36,7 +39,20 @@ pub struct BenchmarkTable {
 
 impl BenchmarkTable {
     pub fn init() -> Self {
-        let table: Vec<Box<dyn Benchmark>> = vec![Box::new(Idle)];
+        let table: Vec<Box<dyn Benchmark>> = vec![
+            // idle
+            Box::new(Idle),
+            // hypercall
+            Box::new(Hypercall),
+            // memory benchmark
+            Box::new(HotMemoryAccess),
+            Box::new(ColdMemoryAccess),
+            Box::new(SetPageTable),
+            // IO benchmark
+            Box::new(In),
+            Box::new(Out),
+            Box::new(Print)
+        ];
         Self { table }
     }
 }
