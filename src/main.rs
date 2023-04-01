@@ -1,7 +1,7 @@
 #![no_std]
 #![no_main]
 #![deny(warnings)]
-#![allow(dead_code)]
+#![allow(dead_code, non_upper_case_globals)]
 #![feature(
     panic_info_message,
     alloc_error_handler,
@@ -11,10 +11,17 @@
     stdsimd
 )]
 
+
+
+extern crate alloc;
+
 mod benchmark;
 #[macro_use]
 mod console;
+mod allocator;
+mod constants;
 mod lang_items;
+mod page_table;
 mod sbi;
 
 pub const PAGE_SIZE: usize = 4096;
