@@ -7,6 +7,8 @@ pub const IDLE: usize = 1;
 impl Benchmark for Idle {
     fn init(&self) {}
 
+    fn benchmark_control(&self) {}
+
     fn benchmark(&self) {
         for _ in 0..IDLE {}
     }

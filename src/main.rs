@@ -11,6 +11,8 @@
     stdsimd
 )]
 
+use constants::PAGE_SIZE;
+
 use crate::{allocator::heap_init, benchmark::BenchmarkTable};
 
 extern crate alloc;
@@ -24,8 +26,6 @@ mod constants;
 mod lang_items;
 mod page_table;
 mod sbi;
-
-pub const PAGE_SIZE: usize = 4096;
 
 /// boot stack size
 const BOOT_STACK_SIZE: usize = 16 * PAGE_SIZE;
@@ -74,6 +74,7 @@ fn benchmark_entry() {
     println!("Hello HyperBenchmark");
     heap_init();
     clint::init(0x2000000);
+    page_table::init();
     let benchmark = BenchmarkTable::init();
     unsafe {
         benchmark.benchmark();

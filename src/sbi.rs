@@ -48,7 +48,7 @@ pub const SBI_REMOTE_HFENCE_VVMA_ASID_FID: usize = 6;
 
 #[inline(always)]
 /// general sbi call
-fn sbi_call(which: usize, arg0: usize, arg1: usize, arg2: usize) -> usize {
+pub fn sbi_call(which: usize, arg0: usize, arg1: usize, arg2: usize) -> usize {
     let mut ret;
     unsafe {
         asm!(
