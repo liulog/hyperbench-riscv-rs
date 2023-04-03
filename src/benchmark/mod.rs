@@ -1,6 +1,6 @@
-use alloc::boxed::Box;
 use alloc::vec;
 use alloc::vec::Vec;
+use alloc::{boxed::Box, string::String};
 
 pub mod hypercall;
 pub mod idle;
@@ -12,6 +12,8 @@ use idle::Idle;
 use io::{In, Out, Print};
 use memory::{ColdMemoryAccess, HotMemoryAccess, SetPageTable};
 
+use crate::{clint::read_mtime, println};
+
 pub trait Benchmark {
     /// initialize benchmark context
     fn init(&self);
@@ -22,33 +24,45 @@ pub trait Benchmark {
 }
 
 pub struct BenchmarkTable {
-    pub table: Vec<Box<dyn Benchmark>>,
+    pub table: Vec<(String, Box<dyn Benchmark>)>,
 }
 
 impl BenchmarkTable {
     pub fn init() -> Self {
-        let table: Vec<Box<dyn Benchmark>> = vec![
+        let table: Vec<(String, Box<dyn Benchmark>)> = vec![
             // idle
-            Box::new(Idle),
+            (String::from("Idle"), Box::new(Idle)),
             // hypercall
-            Box::new(Hypercall),
+            (String::from("Hypercall"), Box::new(Hypercall)),
             // memory benchmark
-            Box::new(HotMemoryAccess),
-            Box::new(ColdMemoryAccess),
-            Box::new(SetPageTable),
+            (String::from("HotMemoryAccess"), Box::new(HotMemoryAccess)),
+            (String::from("ColdMemoryAccess"), Box::new(ColdMemoryAccess)),
+            (String::from("SetPageTable"), Box::new(SetPageTable)),
             // IO benchmark
-            Box::new(In),
-            Box::new(Out),
-            Box::new(Print),
+            (String::from("In"), Box::new(In)),
+            (String::from("Out"), Box::new(Out)),
+            (String::from("Print"), Box::new(Print)),
         ];
         Self { table }
     }
 
-    pub fn benchmark(&self) {
-        for item in self.table.iter() {
-            item.init();
-            item.benchmark();
-            item.clean();
+    /// # Safety
+    pub unsafe fn benchmark(&self) {
+        for (name, bench) in self.table.iter() {
+            println!("============================");
+            println!("Benchmark {}:", name);
+            bench.init();
+            let start_timer = read_mtime();
+            bench.benchmark();
+            let end_timer = read_mtime();
+            bench.clean();
+            println!(
+                "start: {}, end: {}, consume: {}",
+                start_timer,
+                end_timer,
+                end_timer - start_timer
+            );
+            println!("============================");
         }
     }
 }

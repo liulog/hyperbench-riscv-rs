@@ -11,12 +11,15 @@
     stdsimd
 )]
 
+use crate::{allocator::heap_init, benchmark::BenchmarkTable};
+
 extern crate alloc;
 
 mod benchmark;
 #[macro_use]
 mod console;
 mod allocator;
+mod clint;
 mod constants;
 mod lang_items;
 mod page_table;
@@ -34,7 +37,9 @@ static BOOT_STACK: [u8; BOOT_STACK_SIZE] = [0u8; BOOT_STACK_SIZE];
 #[link_section = ".text.entry"]
 #[export_name = "_start"]
 #[naked]
-/// hypervisor entrypoint
+/// # Safety
+///
+/// Benchmark entrypoint
 pub unsafe extern "C" fn start() -> ! {
     core::arch::asm!(
         // prepare stack
@@ -66,5 +71,11 @@ fn clear_bss() {
 #[no_mangle]
 fn benchmark_entry() {
     clear_bss();
-    println!("Hello World");
+    println!("Hello HyperBenchmark");
+    heap_init();
+    clint::init(0x2000000);
+    let benchmark = BenchmarkTable::init();
+    unsafe {
+        benchmark.benchmark();
+    }
 }
