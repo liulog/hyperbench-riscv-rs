@@ -11,7 +11,7 @@ use hypercall::Hypercall;
 use idle::Idle;
 use io::{Out, Print};
 // use memory::{ColdMemoryAccess, HotMemoryAccess, SetPageTable};
-use memory::SetPageTable;
+use memory::{ColdMemoryAccess, HotMemoryAccess, SetPageTable};
 
 use crate::{clint::read_mtime, println};
 
@@ -41,8 +41,8 @@ impl BenchmarkTable {
             (String::from("Hypercall"), Box::new(Hypercall)),
             // memory benchmark
             (String::from("SetPageTable"), Box::new(SetPageTable)),
-            // (String::from("HotMemoryAccess"), Box::new(HotMemoryAccess)),
-            // (String::from("ColdMemoryAccess"), Box::new(ColdMemoryAccess)),
+            (String::from("HotMemoryAccess"), Box::new(HotMemoryAccess)),
+            (String::from("ColdMemoryAccess"), Box::new(ColdMemoryAccess)),
             // IO benchmark
             // (String::from("In"), Box::new(In)),
             (String::from("Out"), Box::new(Out)),

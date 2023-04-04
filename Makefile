@@ -14,10 +14,10 @@ QEMU 		    := $(QEMUPATH)qemu-system-riscv64
 QEMUOPTS        := --machine virt -m 3G -bios $(BOOTLOADER) -nographic -kernel $(HYPERBENCH_BIN)
 
 
-$(HYPERBENCH_ELF):
+build:
 	cargo build
 
-$(HYPERBENCH_BIN): $(HYPERBENCH_ELF)
+$(HYPERBENCH_BIN): build
 	$(OBJCOPY) $(HYPERBENCH_ELF) --strip-all -O binary $@
 
 

@@ -78,7 +78,6 @@ pub fn set_mmu(addr: usize, len: usize) {
         let vpn = VirtPageNum((addr >> 12) + (offset >> 12));
         let ppn = PhysPageNum((addr >> 12) + (offset >> 12));
         root_page_table.map(vpn, ppn, PTEFlags::R | PTEFlags::W | PTEFlags::X);
-        // println!("vpn: {:#x}, ppn: {:#x}", vpn.0, ppn.0);
     }
     for offset in (0..0x10000).step_by(PAGE_SIZE) {
         let vpn = VirtPageNum((0x2000000 >> 12) + (offset >> 12));
