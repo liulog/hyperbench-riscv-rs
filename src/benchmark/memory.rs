@@ -36,7 +36,7 @@ impl Benchmark for ColdMemoryAccess {
     fn benchmark_control(&self) {
         let max_page = (128 * 1024 * 1024) / PAGE_SIZE;
         for i in 0..COLD_MEMORY_COUNT {
-            let _ = 0x8000_0000 + ((i * 4) % max_page) * PAGE_SIZE;
+            let _ = 0x8000_0000 + (i % max_page) * PAGE_SIZE;
         }
     }
 
