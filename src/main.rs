@@ -79,4 +79,6 @@ fn benchmark_entry() {
     unsafe {
         benchmark.benchmark();
     }
+    println!("All benchmarks are done!");
+    loop { }
 }
