@@ -9,8 +9,9 @@ OBJCOPY         := rust-objcopy --binary-architecture=riscv64
 
 BOOTLOADER      := bootloader/rustsbi-qemu.bin
 
-QEMUPATH	    ?= ~/software/qemu/qemu-7.1.0/build/
-QEMU 		    := $(QEMUPATH)qemu-system-riscv64
+# QEMUPATH	    ?= ~/software/qemu/qemu-7.1.0/build/
+# QEMU 		    := $(QEMUPATH)qemu-system-riscv64
+QEMU 		    := qemu-system-riscv64
 QEMUOPTS        := --machine virt -m 3G -bios $(BOOTLOADER) -nographic -kernel $(HYPERBENCH_BIN)
 
 

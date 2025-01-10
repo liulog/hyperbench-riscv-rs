@@ -73,7 +73,7 @@ fn benchmark_entry() {
     clear_bss();
     println!("Hello HyperBenchmark");
     heap_init();
-    clint::init(0x2000000);
+    // clint::init(0x2000000);
     page_table::init();
     let benchmark = BenchmarkTable::init();
     unsafe {
